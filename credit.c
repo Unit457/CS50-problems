@@ -17,6 +17,7 @@ int len(long long num)
     return len;
 }
 
+// Verifica se um número de cartão de crédito é válido (VISA, AMEX, MASTERCARD) ou inválido
 int main(void)
 {
     // Pega o número do cartão
