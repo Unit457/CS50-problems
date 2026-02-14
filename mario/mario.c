@@ -1,6 +1,7 @@
 #include <stdio.h>
-#include "cs50.h"
+#include "../cs50.h"
 
+// Pede uma altura e imprime uma pirâmide de hashtags da altura informada
 int main(void)
 {
     int height;
@@ -17,7 +18,7 @@ int main(void)
         // A quantidade de espaços antes das tags será a altura total da pirâmide - (a iteração que estivermos)
         // Por exemplo: 
         // Se estamos printando a primeira tag de uma pirâmide com 4 de altura, precisamos de 3 (4-1) espaços antes de printar a tag 
-        int spaces = height-(i);
+        int spaces = height-i;
         // A quantidade de tags se dá pela iteração que estivermos
         int tags = i;
 

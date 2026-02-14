@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "cs50.h"
+#include "../cs50.h"
 
 // Função que retorna a quantidade de dígitos do cartão
 int len(long long num)
@@ -36,12 +36,7 @@ int main(void)
     // Agora, vamos obter separadamente os dígitos do cartão
 
     // Crie uma array que vai armazenar os dígitos
-    int *digits = malloc(cardLen * sizeof(int));
-    if (digits == NULL)
-    {
-        printf("Malloc failed for digits array");
-        exit(1);
-    }
+    int digits[cardLen];
 
     // Se multiplicamos 1 por 10 (cardLen-1) vezes, obtemos o número pelo qual devemos dividir o cartão para obter o seu primeiro dígito
     // Exemplo:
@@ -107,7 +102,6 @@ int main(void)
             if (digits[0] != 3 || (digits[1] != 4 && digits[1] != 7))
             {
                 printf("INVALID\n");
-                free(digits);
                 exit(0);
             }
         }
@@ -128,7 +122,6 @@ int main(void)
             if (digits[0] != 5 || (digits[1] < 1 || digits[1] > 5))
             {
                 printf("INVALID\n");
-                free(digits);
                 exit(0);
             }
         }
@@ -138,23 +131,9 @@ int main(void)
         nonDoubledDigitsSize = doubledDigitsSize;
     }
 
-    // Malloc para os dois
-    int *doubledDigits = malloc(doubledDigitsSize * sizeof(int));
-    if (doubledDigits == NULL)
-    {
-        printf("Malloc failed for doubledDigits array");
-        free(digits);
-        exit(1);
-    }
-
-    int *nonDoubledDigits = malloc(nonDoubledDigitsSize * sizeof(int));
-    if (nonDoubledDigits == NULL)
-    {
-        printf("Malloc failed for nonDoubledDigits array");
-        free(doubledDigits);
-        free(digits);
-        exit(1);
-    }
+    // Inicializa a array de ambos
+    int doubledDigits[doubledDigitsSize];
+    int nonDoubledDigits[nonDoubledDigitsSize];
 
     // Multiplica todos os dígitos que devem ser multiplicados por 2
     for (int i = cardLen-2, j = 0; i > -1; i-=2, j++)
@@ -195,18 +174,12 @@ int main(void)
             if (digits[0] == 4)
             {
                 printf("VISA\n");
-                free(nonDoubledDigits);
-                free(doubledDigits);
-                free(digits);
                 exit(0);
             }
             // Se não, é mastercard
             else
             {
                 printf("MASTERCARD\n");
-                free(nonDoubledDigits);
-                free(doubledDigits);
-                free(digits);
                 exit(0);
             }
         }
@@ -215,18 +188,12 @@ int main(void)
         {
             // É amex
             printf("AMEX\n");
-            free(nonDoubledDigits);
-            free(doubledDigits);
-            free(digits);
             exit(0);
         }
         else
         {
             // Qualquer outra coisa, é inválido
             printf("INVALID\n");
-            free(nonDoubledDigits);
-            free(doubledDigits);
-            free(digits);
             exit(0);
         }
     }
@@ -234,9 +201,6 @@ int main(void)
     else
     {
         printf("INVALID\n");
-        free(nonDoubledDigits);
-        free(doubledDigits);
-        free(digits);
         exit(0);
     }
 }
