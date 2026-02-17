@@ -5,14 +5,14 @@
 // Função que retorna a quantidade de dígitos do cartão
 int len(long long num)
 {
-    // Divida o número do cartão por 10.
-    // Cada vez que realizar essa divisão, adicione +1 a quantidade de dígitos
-    // Quando a divisão resultar em 0 (o número não for divisível por 10), atingimos o último dígito do cartão
     int len = 0;
+    // Enquanto o número não for 0
     while (num != 0)
     {
-        num = num / 10;
+        // Divida o número do cartão por 10 e adicione +1 a quantidade de dígitos
+        num/=10;
         len++;
+        // Quando a divisão resultar em 0 (o número não for divisível por 10), atingimos o último dígito do cartão
     }
     return len;
 }
@@ -34,61 +34,38 @@ int main(void)
     }
 
     // Agora, vamos obter separadamente os dígitos do cartão
-
     // Crie uma array que vai armazenar os dígitos
     int digits[cardLen];
 
-    // Se multiplicamos 1 por 10 (cardLen-1) vezes, obtemos o número pelo qual devemos dividir o cartão para obter o seu primeiro dígito
-    // Exemplo:
-    // Cartão = 2345
-    // cardLen = 4
-    // cardlen-1 = 3
-    // 1 * 10 = 10
-    // 10 * 10 = 100
-    // 100 * 10 = 1000
-    // 2345 / 1000 = 2 (primeiro dígito)
-    long long divisor = 1;
-    for (int i = 0; i < cardLen-1; i++)
-    {
-        divisor = divisor * 10;
-    }
-
     // Agora vamos colocar cada dígito do cartão na array
-    // Para cada dígito no cartão, cheque:
-    for (int i = 0; i < cardLen; i++)
+    // Porém, ao contrário, para enxergamos com mais facilidade quais números devem e não devem ser multiplicados
+    int digit;
+    int divisor = 10;
+    // Para cada dígito no cartão:
+    for (int i = cardLen-1; i > -1; i++)
     {
-        int digit;
-        // Se for o primeiro dígito, basta dividir o cartão pelo divisor que obtemos anteriormente.
+        // Se for o primeiro dígito
         if (i == 0)
         {
-            digit = card / divisor;
-            digits[i] = digit;
+            // Basta realizar módulo por 10
+            digit = card % divisor;
         }
-        // Se for qualquer dígito que não seja o último, vamos remover um zero do divisor, dividir o cartão pelo divisor e obter o resto da divisão deste número dividido por 10.
-        // Exemplo:
-        // Cartão = 1234
-        // Divisor = 100 (anteriormente 1000)
-        // 1234 / 100 = 12
-        // 12 / 10 = 1, resto 2 (2 é o dígito que buscamos)
+        // Se não for o primeiro nem o último dígito
         else if (i != cardLen-1)
         {
-            divisor = divisor / 10;
+            // Basta dividir card por divisor e realizar módulo por 10
             digit = (card / divisor) % 10;
-            digits[i] = digit;
+            // Depois, multiplicamos o divisor por 10 (12345 / 10 = 1234, 1234 % 10 = 4 | 12345 / 100 = 123, 123 % 10 = 3 | ...)
+            divisor*=10;
         }
-        // Se for o último dígito, basta dividir o cartão por 10 e obter o resto.
-        // Exemplo:
-        // Cartão - 918371350513
-        // Cartão / 10 = 91837135051, resto 3 (3 é o dígito que buscamos)
+        // Quando chegarmos no último dígito
         else
         {
-            digit = card % 10;
-            digits[i] = digit;
+            // Basta dividir pelo divisor (12345 / 10000 = 1)
+            digit = card / divisor;
         }
+        digits[i] = digit;
     }
-
-    int doubledDigitsSize;
-    int nonDoubledDigitsSize;
 
     // Para os cartões de tamanho ímpar
     if (cardLen == 13 || cardLen == 15)
@@ -105,11 +82,6 @@ int main(void)
                 exit(0);
             }
         }
-
-        // A quantidade de dígitos que serão duplicados será (cardLen-1) / 2
-        doubledDigitsSize = (cardLen-1) / 2;
-        // A quantidade de dígitos que não serão duplicados será 1 a mais do que aqueles que serão
-        nonDoubledDigitsSize = doubledDigitsSize + 1;
     }
     // Para os cartões de tamanho par
     else
@@ -125,43 +97,46 @@ int main(void)
                 exit(0);
             }
         }
-        
-        // A quantidade de dígitos duplicados será cardLen / 2, e a quantidade de dígitos não duplicados será a mesma (o número é par)  
-        doubledDigitsSize = cardLen / 2;
-        nonDoubledDigitsSize = doubledDigitsSize;
     }
 
-    // Inicializa a array de ambos
-    int doubledDigits[doubledDigitsSize];
-    int nonDoubledDigits[nonDoubledDigitsSize];
-
-    // Multiplica todos os dígitos que devem ser multiplicados por 2
-    for (int i = cardLen-2, j = 0; i > -1; i-=2, j++)
-    {
-        doubledDigits[j] = digits[i]*2;
-    }
-
-    // Armazena todos aqueles que não devem ser multiplicados
-    for (int i = cardLen-1, j = 0; i > -1; i-=2, j++)
-    {
-        nonDoubledDigits[j] = digits[i];
-    }
-
+    // Agora vamos realizar a checksum
     int checksum = 0;
-
-    for (int i = 0; i < doubledDigitsSize; i++)
+    int doubleChoice = 0;
+    
+    // Para cada dígito em digits
+    for (int i = 0; i < cardLen; i++)
     {
-        // Divide o número em dois dígitos, para caso seja um número de duas casas decimais
-        int firstDigit = doubledDigits[i] / 10;
-        int secondDigit = doubledDigits[i] % 10;
-        // Os adiciona a checksum
-        checksum += firstDigit + secondDigit;
-    }
+        // Se ele deve ser multiplicado
+        if (doubleChoice)
+        {
+            // Multiplique-o
+            digit = digits[i] * 2;
 
-    for (int i = 0; i < nonDoubledDigitsSize; i++)
-    {
-        // Adiciona cada número não multiplicado ao checksum
-        checksum += nonDoubledDigits[i];
+            // Se o resultado tiver mais que 1 dígito
+            if (digit > 9)
+            {
+                // Adicione os dígitos separadamente na checksum
+                checksum+=(digit/10)+(digit%10);
+            }
+            // Se o resultado tiver apenas 1 dígito
+            else
+            {
+                // Adicione normalmente
+                checksum+=digit;
+            }
+
+            // O próximo dígito não deve ser multiplicado
+            doubleChoice = 0;
+        }
+        // Se ele não deve ser multiplicado
+        else
+        {
+            // Adicione-o normalmente
+            checksum+=digits[i];
+
+            // O próximo dígito deve ser multiplicado
+            doubleChoice = 1;
+        }
     }
 
     // Se a checksum for válida
