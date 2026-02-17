@@ -102,7 +102,6 @@ int main(void)
     // Agora vamos realizar a checksum
     int checksum = 0;
     int doubleChoice = 0;
-    int digit;
     
     // Para cada dígito em digits
     for (int i = 0; i < cardLen; i++)
