@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+        <link href="styles.css" rel="stylesheet">
+        <title>Trivia!</title>
+        <script>
+            // TODO: Add code to check answers to questions
+            document.addEventListener("DOMContentLoaded", function() {
+                document.getElementById("gordon").addEventListener("click", function() {
+                    this.style.backgroundColor = "red";
+                })
+
+                document.getElementById("alyx").addEventListener("click", function() {
+                    this.style.backgroundColor = "red";
+                })
+
+                document.getElementById("barney").addEventListener("click", function() {
+                    this.style.backgroundColor = "green";
+                })
+
+
+                document.getElementById("frForm").addEventListener("submit", function() {
+                    const value = document.getElementById("frResponse").value;
+                    const box = document.getElementById("frResponse");
+                    const answeris = document.getElementById("answeris");
+                    if (value.trim() === "querySelector" || value.trim() === "queryselector")
+                    {
+                        box.style.backgroundColor = "green";
+                        answeris.innerHTML = "Correct!";
+                    }
+                    else
+                    {
+                        box.style.backgroundColor = "red";
+                        answeris.innerHTML = "Incorrect!";
+                    }
+                })
+            })
+        </script>
+    </head>
+    <body>
+        <div class="header">
+            <h1>Trivia!</h1>
+        </div>
+
+        <div class="container">
+            <div class="section">
+                <h2>Part 1: Multiple Choice </h2>
+                <hr>
+                <!-- TODO: Add multiple choice question here -->
+                <h3>Which one of the following languages are responsible for a website's fundamental structure?</h3>
+                <button type="button" id="gordon">CSS</button> <button type="button" id="alyx">HTML</button> <button type="button" id="barney">JavaScript</button>
+            </div>
+
+            <div class="section">
+                <h2>Part 2: Free Response</h2>
+                <hr>
+                <!-- TODO: Add free response question here -->
+                <h3>What method can be used in JavaScript to return the first found element that matches the CSS selector inserted as argument? (insert name only)</h3>
+                <p id="answeris"></p>
+                <form id="frForm">
+                    <input name="frResponse" id="frResponse" type="text"> <input type="submit" value="Submit">
+                </form>
+            </div>
+        </div>
+    </body>
+</html>
