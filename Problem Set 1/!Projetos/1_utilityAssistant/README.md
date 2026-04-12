@@ -1,5 +1,4 @@
 Esse projeto é um "assistente de utilidades".
-
 Ao iniciar o programa, o usuário recebe as opções:
 
 
