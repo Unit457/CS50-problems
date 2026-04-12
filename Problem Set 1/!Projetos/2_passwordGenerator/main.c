@@ -4,7 +4,7 @@
 #include <string.h>
 #include <ctype.h>
 
-// Utilizada para definir o tamanho do cartão
+// Utilizada para definir o tamanho da senha
 int random(int min, int max);
 
 int main(void)
@@ -31,39 +31,21 @@ int main(void)
     password[1] = numbers[rand() % numbersLen];
     password[2] = specials[rand() % specialsLen];
 
-    // Popula o resto de password  
-    for (int i = 3; i < passSize; i++)
-    {
-        int typeRoll = random(1, 5);
+    // Popula o resto da array password
+    for (int i = 3; i < passSize; i++) {
+        int typeRoll = random(1, 100);
 
-        switch(typeRoll)
-        {
-            case 1:
-                password[i] = letters[rand() % lettersLen];
-                break;
-
-            case 2:
-            case 3:
-                password[i] = tolower(letters[rand() % lettersLen]);
-                break;
-
-            case 4:
-                password[i] = numbers[rand() % numbersLen];
-                break;
-
-            case 5:
-                password[i] = specials[rand() % specialsLen];
-                break;
-        }
+        if (typeRoll >= 40) password[i] = tolower(letters[rand() % lettersLen]);
+        else if (typeRoll >= 60) password[i] = letters[rand() % lettersLen];
+        else if (typeRoll >= 80) password[i] = numbers[rand() % numbersLen];
+        else password[i] = specials[rand() % specialsLen];
     }
 
     // Troca as posições dos três primeiros caracteres com outros aleatórios já incluídos na senha
-    for (int i = 0; i < 3; i++)
-    {
+    for (int i = 0; i < 3; i++) {
         int tradedIndex = rand() % passSize;
 
-        while (tradedIndex < 3)
-        {
+        while (tradedIndex < 3) {
             tradedIndex = rand() % passSize;
         }
 
@@ -71,14 +53,11 @@ int main(void)
         password[i] = password[tradedIndex];
         password[tradedIndex] = storage;
     }
-
     printf(password);
 }
 
-// Utilizada para definir o tamanho do cartão
-int random(int min, int max)
-{
+// Utilizada para definir o tamanho da senha
+int random(const int min, const int max) {
     const int number = rand() % (max - min + 1) + min;
-
     return number;
 }
