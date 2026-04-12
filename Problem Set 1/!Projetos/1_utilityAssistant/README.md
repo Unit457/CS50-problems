@@ -1,4 +1,4 @@
-Esse projeto é um "assistente de utilidades".
+Esse projeto é um "assistente de utilidades".\n
 Ao iniciar o programa, o usuário recebe as opções:
 1 - ATM
 2 - Unit conversor
